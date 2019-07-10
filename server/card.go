@@ -113,7 +113,12 @@ func ParseCard(c string) Card {
 		return NilCard
 	}
 
+	fmt.Printf(" rank :[%b] (1 << uint32(16+rank)):[%b]\n", rank, 1<<uint32(16+rank))
+	fmt.Printf(" suit :[%b]\n", suit)
+	fmt.Printf(" rank :[%b] (rank << 8):[%b]\n", rank, rank << 8)
+	fmt.Printf(" rank :[%b] (primes[rank]):[%b]\n", rank, primes[rank])
 	card := (1 << uint32(16+rank)) | suit | (rank << 8) | primes[rank]
+	fmt.Printf(" card:[%b]\n", card)
 
 	return Card(card)
 }
@@ -123,11 +128,14 @@ func (card Card) Rank() int {
 }
 
 func (card Card) Suit() int {
+	fmt.Printf("card & SuitMask:[%b]\n", card & SuitMask)
 	return int(card & SuitMask)
 }
 
 func (card Card) prime() int {
+	fmt.Printf("card & 0xFF :[%b]\n", card & SuitMask)
 	return int(card & 0xFF)
+
 }
 
 func (card Card) MarshalJSON() ([]byte, error) {

@@ -1928,7 +1928,7 @@ var values = []int{
 	1676, 14, 168, 2469, 2468, 1611, 23, 1610, 13, 179, 12, 167, 11,
 }
 
-/*
+/*d
 ** each of the thirteen card ranks has its own prime number
 **
 ** deuce = 2

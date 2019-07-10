@@ -23,6 +23,8 @@ func main() {
 			if card == poker.NilCard {
 				return
 			}
+			c_json,_:=card.MarshalJSON()
+			fmt.Printf("card.MarshalJSON():[%v]\t card.Rank():[%b]\tcard.String():[%s]\n", string(c_json), card.Rank(), card.String())
 			cards[i] = card
 		}
 		hand := poker.Eva5Hand(cards)
