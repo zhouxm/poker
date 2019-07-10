@@ -7,6 +7,5 @@ require (
 	github.com/facebookgo/grace v0.0.0-20180706040059-75cf19382434
 	github.com/facebookgo/httpdown v0.0.0-20180706035922-5979d39b15c2 // indirect
 	github.com/facebookgo/stats v0.0.0-20151006221625-1b76add642e4 // indirect
-	github.com/ginuerzh/poker v0.0.0-20180623002357-241bd35e1afd
 	github.com/gorilla/websocket v1.4.0
 )

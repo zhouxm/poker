@@ -1,12 +1,11 @@
 package main
 
 import (
+	poker "Texas/server"
 	"flag"
 	"log"
 	"strconv"
 	"time"
-
-	"github.com/ginuerzh/poker/server"
 )
 
 var (

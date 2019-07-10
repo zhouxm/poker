@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ginuerzh/poker/server"
+	"Texas/server"
 	"github.com/gorilla/websocket"
 )
 

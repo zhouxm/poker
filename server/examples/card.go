@@ -1,9 +1,9 @@
 package main
 
 import (
+	"Texas/server"
 	"flag"
 	"fmt"
-	"github.com/ginuerzh/poker"
 )
 
 func init() {

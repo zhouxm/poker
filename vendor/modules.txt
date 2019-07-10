@@ -7,7 +7,5 @@ github.com/facebookgo/grace/gracenet
 github.com/facebookgo/httpdown
 # github.com/facebookgo/stats v0.0.0-20151006221625-1b76add642e4
 github.com/facebookgo/stats
-# github.com/ginuerzh/poker v0.0.0-20180623002357-241bd35e1afd
-github.com/ginuerzh/poker/server
 # github.com/gorilla/websocket v1.4.0
 github.com/gorilla/websocket
