@@ -5,53 +5,46 @@ var userName = "cmdTest";
 var userID = "";
 var loginCertification = false;
 
-function getCookie(name)
-{
+function getCookie(name) {
     var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 
-    if(arr = document.cookie.match(reg))
+    if (arr = document.cookie.match(reg))
         return (decodeURI(arr[2]));
     else
         return null;
 }
 
-function setCookie(name, value)
-{
+function setCookie(name, value) {
     var Days = 30;
     var exp = new Date();
-    exp.setTime(exp.getTime() + Days*24*60*60*1000);
-    var str = name + "="+ encodeURI(value) + "; expires=" + exp.toGMTString();
+    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+    var str = name + "=" + encodeURI(value) + "; expires=" + exp.toGMTString();
     document.cookie = str;
 }
 
-var callbackOpen = function(data)
-{
+var callbackOpen = function (data) {
     console.log("callbackOpen " + data);
 
-    game.betApi.checkVersion(strVersion, function(isOK){
+    game.betApi.checkVersion(strVersion, function (isOK) {
         console.log("checkVersion " + isOK);
     });
 };
 
-var callbackClose = function(data)
-{
+var callbackClose = function (data) {
     console.log("callbackClose " + data);
     loginCertification = false;
 
     game.state.states["MainState"]._disconnectReset();
 };
 
-var callbackMessage = function(data)
-{
+var callbackMessage = function (data) {
     console.log("callbackMessage " + data);
-    if(data.version && data.version == strVersion) // checkVersion result
+    if (data.version && data.version == strVersion) // checkVersion result
     {
         game.state.states["LoginState"].initUserName();
-    }
-    else if(!loginCertification) // loginCertification result
+    } else if (!loginCertification) // loginCertification result
     {
-        if(data.id)
-        {
+        if (data.id) {
             userID = data.id;
             game.state.states["MainState"].userID = userID
             game.betApi.setUserID(userID);
@@ -60,93 +53,71 @@ var callbackMessage = function(data)
             var LoginState = game.state.states["LoginState"];
             LoginState.hanldeInitUserName();
         }
-    }
-    else if(data.type == "iq")
-    {
-        if(data.class == "room")       //查询游戏房间列表
+    } else if (data.type == "iq") {
+        if (data.class == "room")       //查询游戏房间列表
         {
             game.state.states["LoginState"].handleCreateRoom(data);
-        }
-        else if(data.class == "roomlist")       //查询游戏房间列表
+        } else if (data.class == "roomlist")       //查询游戏房间列表
         {
             game.state.states["LoginState"].handleGetRoomList(data);
-        }
-        else if(data.class == "room")  //查询游戏房间信息
+        } else if (data.class == "room")  //查询游戏房间信息
+        {
+
+        } else if (data.class == "occupant")  //查询玩家信息
         {
 
         }
-        else if(data.class == "occupant")  //查询玩家信息
+    } else if (data.type == "message") {
+    } else if (data.type == "presence") {
+        if (data.action == "active")         //服务器广播进入房间的玩家
         {
-
-        }
-    }
-    else if(data.type == "message")
-    {
-    }
-    else if(data.type == "presence")
-    {
-        if(data.action == "active")         //服务器广播进入房间的玩家
-        {
-        }
-        else if(data.action == "gone")      //服务器广播离开房间的玩家
+        } else if (data.action == "gone")      //服务器广播离开房间的玩家
         {
             game.state.states["MainState"].handleGone(data);
-        }
-        else if(data.action == "join")      //服务器通报加入游戏的玩家
+        } else if (data.action == "join")      //服务器通报加入游戏的玩家
         {
             game.state.states["MainState"].handleJoin(data);
-        }
-        else if(data.action == "button")    //服务器通报本局庄家
+        } else if (data.action == "button")    //服务器通报本局庄家
         {
             game.state.states["MainState"].handleButton(data);
-        }
-        else if(data.action == "preflop")   //服务器通报发牌
+        } else if (data.action == "preflop")   //服务器通报发牌
         {
             game.state.states["MainState"].handlePreflop(data);
-        }
-        else if(data.action == "flop")   //发牌
+        } else if (data.action == "flop")   //发牌
         {
             game.state.states["MainState"].handleFlop(data);
-        }
-        else if(data.action == "turn")   //发牌
+        } else if (data.action == "turn")   //发牌
         {
             game.state.states["MainState"].handleTurn(data);
-        }
-        else if(data.action == "river")   //发牌
+        } else if (data.action == "river")   //发牌
         {
             game.state.states["MainState"].handleRiver(data);
-        }
-        else if(data.action == "pot")       //服务器通报奖池
+        } else if (data.action == "pot")       //服务器通报奖池
         {
             game.state.states["MainState"].handlePot(data);
-        }
-        else if(data.action == "action")    //服务器通报当前下注玩家
+        } else if (data.action == "action")    //服务器通报当前下注玩家
         {
             game.state.states["MainState"].handleAction(data);
 
-        }
-        else if(data.action == "bet")       //服务器通报玩家下注结果
+        } else if (data.action == "bet")       //服务器通报玩家下注结果
         {
             game.state.states["MainState"].handleBet(data);
 
-        }
-        else if(data.action == "showdown")  //服务器通报摊牌和比牌
+        } else if (data.action == "showdown")  //服务器通报摊牌和比牌
         {
             game.state.states["MainState"].handleShowDown(data);
-        }
-        else if(data.action == "state")  //服务器通报房间信息
+        } else if (data.action == "state")  //服务器通报房间信息
         {
             game.state.states["MainState"].handleState(data);
         }
     }
 };
 
-var callbackError = function(data)
-{
+var callbackError = function (data) {
     console.log("callbackError" + data);
 };
 
-var LoginState = function() {
+var LoginState = function () {
 
     this.scale;                         //全局缩放比
     this.group;
@@ -175,10 +146,10 @@ var LoginState = function() {
 LoginState.prototype = {
 
     preload: function () {
-        game.load.image("gamecenterbackground", gImageDir+'background.png');
-        game.load.image('buttonblue', gImageDir+'btn-blue.png');
-        game.load.image('buttongrey', gImageDir+'btn-grey.png');
-        game.load.image('buttonyellow', gImageDir+'btn-yellow.png');
+        game.load.image("gamecenterbackground", gImageDir + 'background.png');
+        game.load.image('buttonblue', gImageDir + 'btn-blue.png');
+        game.load.image('buttongrey', gImageDir + 'btn-grey.png');
+        game.load.image('buttonyellow', gImageDir + 'btn-yellow.png');
     },
 
     create: function () {
@@ -199,9 +170,8 @@ LoginState.prototype = {
         this.group = game.add.group();
         var listWidth = game.width / 2;
         var listItemHeight = game.height / 12;
-        var style = { font: _fontString(16), fill: "#0069B2", wordWrapWidth: listWidth * 0.9, align: "left"};
-        for(var i = 0; i < 10; i++)
-        {
+        var style = {font: _fontString(16), fill: "#0069B2", wordWrapWidth: listWidth * 0.9, align: "left"};
+        for (var i = 0; i < 10; i++) {
             var listItem = game.add.button(0, i * listItemHeight, 'buttonblue', this.selectRoom);
             listItem.width = listWidth;
             listItem.height = listItemHeight;
@@ -223,7 +193,7 @@ LoginState.prototype = {
         this.btnNext = game.add.button(listWidth / 2, 10 * listItemHeight, 'buttonyellow', this.clickNext, this);
         this.btnNext.width = listWidth / 2;
         this.btnNext.height = listItemHeight;
-        style = { font: _fontString(28), fill: "#CE8D00"};
+        style = {font: _fontString(28), fill: "#CE8D00"};
         this.textPrev = game.add.text(this.btnPrev.x + 0.5 * this.btnPrev.width, this.btnPrev.y + 0.5 * this.btnPrev.height, "上一页", style);
         this.textPrev.anchor.set(0.5);
         this.textPrev.scale.setTo(this.scale);
@@ -270,95 +240,77 @@ LoginState.prototype = {
         this.group.visible = false;
     },
 
-    initUserName:function()
-    {
+    initUserName: function () {
         var name = ""
-        
+
         if (gParam.user_name != null && gParam.user_name != "") {
             name = gParam.user_name;
         } else {
             name = getCookie("name");
         }
-        
-        if(!name || name.length == 0)
-        {
-            name = prompt("请输入您的名字","");
+
+        if (!name || name.length == 0) {
+            name = prompt("请输入您的名字", "");
         }
-        if(name)
-        {
+        if (name) {
             userName = name;
             setCookie("name", userName);
-            game.betApi.loginCertification(userName, function(isOK){
-                console.log("loginCertification is " +  isOK);
-                if(!isOK)
-                {
+            game.betApi.loginCertification(userName, function (isOK) {
+                console.log("loginCertification is " + isOK);
+                if (!isOK) {
                     userName = "";
                 }
             });
-        }
-        else
-        {
+        } else {
             this.initUserName();
         }
     },
 
-    hanldeInitUserName:function()
-    {
+    hanldeInitUserName: function () {
         var text = "用户名: " + userName;
         this.leName.setText(text);
         this.group.visible = true;
         game.betApi.getRoomList();
     },
 
-    handleCreateRoom:function(data)
-    {
+    handleCreateRoom: function (data) {
         this.currentSelectRoomID = data.room.id;
         this.clickLogin();
     },
 
-    handleGetRoomList:function(data)
-    {
+    handleGetRoomList: function (data) {
         this.roomInfoList = data.rooms;
-        if(!this.roomInfoList)
-        {
+        if (!this.roomInfoList) {
             this.roomInfoList = [];
         }
 
-        while(this.CountPerPage * this.currentPage > this.roomInfoList.length)
-        {
+        while (this.CountPerPage * this.currentPage > this.roomInfoList.length) {
             this.currentPage--;
         }
 
-        for(var i = 0; i < this.CountPerPage; i++)
-        {
-            if(i + this.CountPerPage * this.currentPage < this.roomInfoList.length)
-            {
+        for (var i = 0; i < this.CountPerPage; i++) {
+            if (i + this.CountPerPage * this.currentPage < this.roomInfoList.length) {
                 this.roomList[i].visible = true;
                 this.roomTextList[i].visible = true;
                 var index = i + this.CountPerPage * this.currentPage;
                 this.roomList[i].roomID = this.roomInfoList[index].id;
                 var strTitle = "房间ID: " + this.roomInfoList[index].id + "\n小盲注: " + this.roomInfoList[index].sb + "; 大盲注: " + this.roomInfoList[index].bb + "; 当前人数: " + this.roomInfoList[index].n + "; 最大人数: " + this.roomInfoList[index].max;
                 this.roomTextList[i].setText(strTitle);
-            }
-            else
-            {
+            } else {
                 this.roomList[i].visible = false;
                 this.roomTextList[i].visible = false;
             }
         }
     },
 
-    selectRoom:function()
-    {
+    selectRoom: function () {
         var text = "房间名: " + this.roomID;
         game.state.states["LoginState"].leRoomName.setText(text);
         game.state.states["LoginState"].currentSelectRoomID = this.roomID;
     },
 
-    clickPrev:function()
-    {
-        if(this.currentPage == 0)
-        {
+    clickPrev: function () {
+        if (this.currentPage == 0) {
             return;
         }
 
@@ -366,22 +318,18 @@ LoginState.prototype = {
         game.betApi.getRoomList();
     },
 
-    clickNext:function()
-    {
+    clickNext: function () {
         this.currentPage++;
         game.betApi.getRoomList();
     },
 
-    clickRename:function()
-    {
+    clickRename: function () {
         setCookie("name", "");
         location.reload();
     },
 
-    clickLogin:function()
-    {
-        if(this.currentSelectRoomID < 0)
-        {
+    clickLogin: function () {
+        if (this.currentSelectRoomID < 0) {
             alert("请选择一个房间!");
             return;
         }
@@ -390,8 +338,7 @@ LoginState.prototype = {
         game.state.start("MainState");
     },
 
-    clickCreate:function()
-    {
+    clickCreate: function () {
         game.betApi.createRoom("", 5, 10, 30, 9);
     }
 };
